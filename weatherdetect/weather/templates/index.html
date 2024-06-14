@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Detection</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div><h1>Weather Detector</h1></div>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Search city...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="container">
+        {% if weather_data %}
+            {% if weather_data.error %}
+                <div class="weather-info">
+                    <h2>{{ weather_data.error }}</h2>
+                </div>
+            {% else %}
+                <div class="weather-info">
+                    <h2>Weather in {{ weather_data.name }}</h2>
+                    <p>Temperature: {{ weather_data.main.temp }} °C</p>
+                    <p>Feels Like: {{ weather_data.main.feels_like }} °C</p>
+                    <p>Minimum Temperature: {{ weather_data.main.temp_min }} °C</p>
+                    <p>Maximum Temperature: {{ weather_data.main.temp_max }} °C</p>
+                    <p>Pressure: {{ weather_data.main.pressure }} hPa</p>
+                    <p>Humidity: {{ weather_data.main.humidity }} %</p>
+                    <p>Weather: {{ weather_data.weather.0.main }} - {{ weather_data.weather.0.description }}</p>
+                    <p>Wind Speed: {{ weather_data.wind.speed }} m/s</p>
+                    <p>Wind Direction: {{ weather_data.wind.deg }}°</p>
+                    {% if weather_data.rain %}
+                        <p>Rain (last 1h): {{ weather_data.rain.1h }} mm</p>
+                    {% endif %}
+                    <p>Cloudiness: {{ weather_data.clouds.all }} %</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
